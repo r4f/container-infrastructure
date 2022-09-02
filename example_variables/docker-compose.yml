@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  py-example:
+    build:
+      context: .
+      target: python-full
+      #target: minimal-useful-python #for deployment situations
+      args:
+        - user=simpleuser
+    image: python-alpine-full:0.1
+    container_name: pyalp-container
+    secrets:
+      - db_con
+      - db_password
+    environment:
+      POSTGRES_USER: "db_user"
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      DB_CON_FILE: /run/secrets/db_con
+    volumes:
+      - $PWD/scripts/:/scripts/:ro
+    cap_drop: ['ALL']
+    command: python /scripts/show_env.py
+
+secrets:
+  db_con:
+    file: .db_con
+  db_password:
+    file: .db_password
