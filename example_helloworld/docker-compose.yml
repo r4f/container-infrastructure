@@ -1,0 +1,9 @@
+version: "3"
+services:
+  helloworld:
+    image: python:alpine
+    ports:
+      - "8000:8000"
+    volumes:
+      - "$PWD/server:/server"
+    command: ["python", "server/hello.py"]
